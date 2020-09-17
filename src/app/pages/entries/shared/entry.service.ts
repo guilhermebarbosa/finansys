@@ -1,7 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, catchError } from 'rxjs/operators';
 
 import { Entry } from './entry.model';
 
@@ -21,38 +21,22 @@ export class EntryService extends BaseResourceService<Entry> {
    }
 
   create(entry: Entry): Observable<Entry> {
-    return this.categoryService.getById(entry.categoryId).pipe(
-      switchMap(category => {
-        entry.category = category;
-        return super.create(entry);
-      })
-    );
+    return this.setCategoryAndSend(entry, super.create.bind(this))
   }
 
   update(entry: Entry): Observable<Entry> {
+    return this.setCategoryAndSend(entry, super.update.bind(this));
+  }
+
+
+  private setCategoryAndSend(entry: Entry, sendFn: any): Observable<Entry> {
     return this.categoryService.getById(entry.categoryId).pipe(
       switchMap(category => {
         entry.category = category;
-        return super.update(entry);
-      })
+        return sendFn(entry);
+      }),
+      catchError(this.handleError.bind(this))
     );
-  }
-
-  // PROTECTED METHODS
-
-  protected jsonDataToResources(jsonData: any[]): Entry[] {
-    const entries: Entry[] = [];
-
-    jsonData.forEach(element => {
-      const entry = Entry.fromJson(element);
-      entries.push(entry);
-    });
-
-    return entries;
-  }
-
-  protected jsonDataToResource(jsonData: any): Entry {
-    return Entry.fromJson(jsonData);
   }
 
 }

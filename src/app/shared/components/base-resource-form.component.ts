@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { switchMap } from "rxjs/operators";
 
 import toastr from "toastr";
+
 import { BaseResourceModel } from '../models/base-resource.model';
 import { BaseResourceService } from '../services/base-resource.service';
 
@@ -126,7 +127,7 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
   protected actionsForSuccess(resource: T){
     toastr.success('A sua solicitação foi efetuada com sucesso!');
 
-    const baseComponentPath: string = this.route.snapshot.url[0].path;
+    const baseComponentPath: string = this.route.snapshot.parent.url[0].path;
 
     this.router.navigateByUrl(baseComponentPath, {skipLocationChange: true}).then(
       () => this.router.navigate([baseComponentPath, resource.id, 'edit'])

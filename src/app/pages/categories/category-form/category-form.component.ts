@@ -1,6 +1,6 @@
 import { Component, Injector } from '@angular/core';
 import { Validators } from "@angular/forms";
-import { BaseResourceFormComponent } from '../../../shared/components/base-resource-form.component';
+import { BaseResourceFormComponent } from '../../../shared/components/base-resource-form/base-resource-form.component';
 
 import { Category } from "../shared/category.model";
 import { CategoryService } from "../shared/category.service";
@@ -40,7 +40,7 @@ export class CategoryFormComponent extends BaseResourceFormComponent<Category> {
   protected editionPageTitle(): string {
     const resourceName = this.resource.name || '';
 
-    return 'Editando categoria ' + resourceName;
+    return 'Editando categoria: ' + resourceName;
   }
 
 }

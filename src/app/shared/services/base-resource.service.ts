@@ -32,17 +32,17 @@ export abstract class BaseResourceService<T extends BaseResourceModel> {
     );
   }
 
-  create(category: T): Observable<T> {
-    return this.http.post(this.apiPath, category).pipe(
+  create(resource: T): Observable<T> {
+    return this.http.post(this.apiPath, resource).pipe(
       map(this.jsonDataToResource.bind(this)),
       catchError(this.handleError.bind(this))
     );
   }
 
-  update(category: T): Observable<T> {
-    const url:string = `${this.apiPath}/${category.id}`;
-    return this.http.put(url, category).pipe(
-      map(() => category),
+  update(resource: T): Observable<T> {
+    const url:string = `${this.apiPath}/${resource.id}`;
+    return this.http.put(url, resource).pipe(
+      map(() => resource),
       catchError(this.handleError.bind(this))
     );
   }
